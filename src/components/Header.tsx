@@ -9,13 +9,14 @@ import { setSearchTerm } from '@/store/shopSlice';
 const Header: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { searchTerm } = useAppSelector((state) => state.shops.filters);
+  const { searchTerm } = useAppSelector((state) => state.shops.filters); // getting the current search term read from Redux state (via useAppSelector).
+  // so the input is controlled by Redux but stored locally for editing.
   const [localSearch, setLocalSearch] = useState(searchTerm);
 
   const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    dispatch(setSearchTerm(localSearch));
-    navigate(ROUTES.HOME);
+    e.preventDefault();  // 1. Prevent page reload
+    dispatch(setSearchTerm(localSearch));  // // 2. Update global search term using App's dispatch.
+    navigate(ROUTES.HOME);  // 3. Navigate to home page
   };
 
   return (
@@ -59,3 +60,37 @@ const Header: React.FC = () => {
 };
 
 export default Header;
+
+
+// ┌──────────────────────────────────────────────────────────────────┐
+// │                         USER TYPES                               │
+// │                   "transmission" in input                        │
+// └────────────────────────────┬─────────────────────────────────────┘
+//                              │
+//                              ▼
+// ┌──────────────────────────────────────────────────────────────────┐
+// │                   localSearch = "transmission"                    │
+// │              (input shows text, no Redux update)                  │
+// └────────────────────────────┬─────────────────────────────────────┘
+//                              │
+//                              ▼  (User submits)
+// ┌──────────────────────────────────────────────────────────────────┐
+// │                     handleSearch()                                │
+// │  1. e.preventDefault()                                           │
+// │  2. dispatch(setSearchTerm("transmission")) ─────────────────┐   │
+// │  3. navigate(ROUTES.HOME)                                     │   │
+// └────────────────────────────────────────────────────────────────┘
+//                              │                                      │
+//                              ▼                                      │
+// ┌──────────────────────────────────────────────────────────────────┐
+// │                    REDUX STORE UPDATE                            │
+// │  filters.searchTerm = "transmission"                             │
+// │  filteredShops = filter(shopsData, { searchTerm: "transmission" })│◄─┘
+// └────────────────────────────┬─────────────────────────────────────┘
+//                              │
+//                              ▼
+// ┌──────────────────────────────────────────────────────────────────┐
+// │              COMPONENTS RE-RENDER WITH NEW DATA                  │
+// │  Home → shows only transmission specialists                      │
+// │  Shop cards update with filtered results                         │
+// └──────────────────────────────────────────────────────────────────┘
