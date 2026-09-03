@@ -1,9 +1,14 @@
 // src/components/FilterSidebar.tsx
 
-import React from 'react';
-import { useAppDispatch, useAppSelector } from '@/hooks/redux';
-import { setSpecialty, setMinRating, setCity, clearFilters } from '@/store/shopSlice';
-import { shopsData } from '@/data/shops';
+import React from "react";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import {
+  setSpecialty,
+  setMinRating,
+  setCity,
+  clearFilters,
+} from "@/store/shopSlice";
+import { shopsData } from "@/data/shops";
 
 const FilterSidebar: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -11,12 +16,12 @@ const FilterSidebar: React.FC = () => {
 
   // Get unique specialties from all shops
   const allSpecialties = Array.from(
-    new Set(shopsData.flatMap((shop) => shop.specialties))
+    new Set(shopsData.flatMap((shop) => shop.specialties)),
   ).sort();
 
   // Get unique cities
   const allCities = Array.from(
-    new Set(shopsData.map((shop) => shop.city))
+    new Set(shopsData.map((shop) => shop.city)),
   ).sort();
 
   const handleSpecialtyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -35,10 +40,14 @@ const FilterSidebar: React.FC = () => {
     dispatch(clearFilters());
   };
 
-  const hasActiveFilters = filters.searchTerm || filters.specialty || filters.minRating > 0 || filters.city;
+  const hasActiveFilters =
+    filters.searchTerm ||
+    filters.specialty ||
+    filters.minRating > 0 ||
+    filters.city;
 
   return (
-    <div className="bg-light p-4 rounded-4 sticky-top" style={{ top: '20px' }}>
+    <div className="bg-light p-4 rounded-4 sticky-top" style={{ top: "20px" }}>
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h5 className="fw-bold mb-0">
           <i className="bi bi-filters me-2"></i>Filters
@@ -54,7 +63,10 @@ const FilterSidebar: React.FC = () => {
       </div>
 
       <div className="mb-3">
-        <label htmlFor="specialty-filter" className="form-label fw-semibold small text-secondary">
+        <label
+          htmlFor="specialty-filter"
+          className="form-label fw-semibold small text-secondary"
+        >
           <i className="bi bi-tools me-1"></i> Specialty
         </label>
         <select
@@ -72,7 +84,7 @@ const FilterSidebar: React.FC = () => {
         </select>
       </div>
 
-      <div className="mb-3">
+      {/* <div className="mb-3">
         <label htmlFor="city-filter" className="form-label fw-semibold small text-secondary">
           <i className="bi bi-building me-1"></i> City
         </label>
@@ -89,10 +101,13 @@ const FilterSidebar: React.FC = () => {
             </option>
           ))}
         </select>
-      </div>
+      </div> */}
 
       <div className="mb-3">
-        <label htmlFor="rating-filter" className="form-label fw-semibold small text-secondary">
+        <label
+          htmlFor="rating-filter"
+          className="form-label fw-semibold small text-secondary"
+        >
           <i className="bi bi-star me-1"></i> Minimum Rating
         </label>
         <select

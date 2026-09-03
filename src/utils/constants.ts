@@ -7,10 +7,10 @@ export const ROUTES = {
   MENU_DETAIL: "/menu/:id",
   ORDER_CONFIRMATION: "/order-confirmation",
   ORDER_MANAGEMENT: "/order-management",
-  SHOP_DETAIL: '/shop/:id',
-  SHOP_MANAGEMENT: '/management',
-  ABOUT_US: '/about',
-  CONTACT_US: '/contact',
+  SHOP_DETAIL: "/shop/:id",
+  SHOP_MANAGEMENT: "/management",
+  ABOUT_US: "/about",
+  CONTACT_US: "/contact",
 };
 
 export const ROLES = {
@@ -18,8 +18,12 @@ export const ROLES = {
   ADMIN: "Admin",
 };
 
-export const API_BASE_URL = "https://localhost:7069";
-// export const API_BASE_URL = "https://bhattarai-001-site1.site4future.com";
+// export const BASE_URL = "https://localhost:7069";
+export const BASE_URL =
+  "https://auto-comp-backend-g6ckggb3f3hnccfe.canadacentral-01.azurewebsites.net";
+export const API_ENDPOINTS = {
+  SHOPS: "/api/Shop",
+} as const;
 
 export const APP_NAME = "Auto Compare";
 

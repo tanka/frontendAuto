@@ -1,41 +1,75 @@
-// src/store/shopSlice.ts
+import {
+  createSlice,
+  createAsyncThunk,
+  type PayloadAction,
+} from "@reduxjs/toolkit";
+import { type Shop, type ShopFilters, type ShopState } from "@/types";
+import { BASE_URL, API_ENDPOINTS } from "@/utils/constants";
 
-import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit';
-import { type Shop, type ShopFilters, type ShopState } from '@/types';
-import { shopsData } from '@/data/shops';
+// Remove the static data import
+// import { shopsData } from '@/data/shops';
+
+// Define the API response shape
+interface ApiResponse {
+  statusCode: number;
+  isSuccess: boolean;
+  errorMessages: string[];
+  result: Shop[];
+}
 
 const initialState: ShopState = {
-  shops: shopsData,
-  filteredShops: shopsData,
+  shops: [],
+  filteredShops: [],
   selectedShop: null,
-  loading: false,
+  loading: false, // start loading to fetch on mount
   error: null,
   filters: {
-    searchTerm: '',
-    specialty: '',
+    searchTerm: "",
+    specialty: "",
     minRating: 0,
-    city: '',
+    city: "",
   },
 };
 
-// Async thunk to simulate loading shops (in case we want to fetch from API later)
+// Async thunk to fetch shops from the API
 export const fetchShops = createAsyncThunk(
-  'shops/fetchShops',
+  "shops/fetchShops",
   async (_, { rejectWithValue }) => {
     try {
-      // Simulate API delay
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      return shopsData;
+      const url = `${BASE_URL}${API_ENDPOINTS.SHOPS}`;
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data: ApiResponse = await response.json();
+
+      if (!data.isSuccess) {
+        // Use the first error message from the API, or a fallback
+        const errorMsg =
+          data.errorMessages?.length > 0
+            ? data.errorMessages[0]
+            : "Failed to fetch shops";
+        return rejectWithValue(errorMsg);
+      }
+
+      // The API returns shops in data.result
+      return data.result;
     } catch (error) {
-      return rejectWithValue('Failed to fetch shops');
+      if (error instanceof Error) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue("An unknown error occurred");
     }
-  }
+  },
 );
 
 const shopSlice = createSlice({
-  name: 'shops',
+  name: "shops",
   initialState,
   reducers: {
+    // ... (all existing reducers remain unchanged) ...
     setSearchTerm: (state, action: PayloadAction<string>) => {
       state.filters.searchTerm = action.payload;
       state.filteredShops = applyFilters(state.shops, state.filters);
@@ -54,10 +88,10 @@ const shopSlice = createSlice({
     },
     clearFilters: (state) => {
       state.filters = {
-        searchTerm: '',
-        specialty: '',
+        searchTerm: "",
+        specialty: "",
         minRating: 0,
-        city: '',
+        city: "",
       };
       state.filteredShops = state.shops;
     },
@@ -82,15 +116,17 @@ const shopSlice = createSlice({
       })
       .addCase(fetchShops.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        state.error = (action.payload as string) || "Failed to fetch shops";
+        // Optionally clear shops on error
+        state.shops = [];
+        state.filteredShops = [];
       });
   },
 });
 
-// Helper function to apply filters
+// Helper function (unchanged)
 function applyFilters(shops: Shop[], filters: ShopFilters): Shop[] {
   let result = [...shops];
-
   const { searchTerm, specialty, minRating, city } = filters;
 
   if (searchTerm.trim()) {
@@ -101,13 +137,15 @@ function applyFilters(shops: Shop[], filters: ShopFilters): Shop[] {
         shop.description.toLowerCase().includes(term) ||
         shop.address.toLowerCase().includes(term) ||
         shop.city.toLowerCase().includes(term) ||
-        shop.specialties.some((s) => s.toLowerCase().includes(term))
+        shop.specialties.some((s) => s.toLowerCase().includes(term)),
     );
   }
 
   if (specialty) {
     result = result.filter((shop) =>
-      shop.specialties.some((s) => s.toLowerCase().includes(specialty.toLowerCase()))
+      shop.specialties.some((s) =>
+        s.toLowerCase().includes(specialty.toLowerCase()),
+      ),
     );
   }
 
@@ -117,7 +155,9 @@ function applyFilters(shops: Shop[], filters: ShopFilters): Shop[] {
 
   if (city.trim()) {
     const cityLower = city.trim().toLowerCase();
-    result = result.filter((shop) => shop.city.toLowerCase().includes(cityLower));
+    result = result.filter((shop) =>
+      shop.city.toLowerCase().includes(cityLower),
+    );
   }
 
   return result;
