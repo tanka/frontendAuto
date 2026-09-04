@@ -7,6 +7,7 @@ import Home from '@/pages/Home';
 import ShopDetail from '@/pages/ShopDetail';
 import About from '@/pages/About';
 import Contact from '@/pages/Contact';
+import AddShop from './pages/Addshop';
 
 const AppRouter: React.FC = () => {
   return (
@@ -16,6 +17,7 @@ const AppRouter: React.FC = () => {
       <Route path={ROUTES.ABOUT_US} element={<About />} />
       <Route path={ROUTES.CONTACT_US} element={<Contact />} />
       <Route path="*" element={<Home />} />
+      <Route path={ROUTES.ADD_SHOP} element={<AddShop />} />
     </Routes>
   );
 };

@@ -46,6 +46,9 @@ const Header: React.FC = () => {
             <Link to={ROUTES.HOME} className="text-white text-decoration-none">
               <i className="bi bi-house"></i> Home
             </Link>
+            <Link to={ROUTES.ADD_SHOP} className="btn btn-success btn-sm rounded-pill px-3">
+              <i className="bi bi-plus-circle me-1"></i> Add Shop
+            </Link>
             <Link to={ROUTES.ABOUT_US} className="text-white text-decoration-none">
               <i className="bi bi-info-circle"></i> About
             </Link>

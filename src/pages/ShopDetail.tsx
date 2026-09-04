@@ -134,12 +134,11 @@ const ShopDetail: React.FC = () => {
                 )}
               </div>
 
-              <p className="text-secondary mb-4">{description}</p>
+              {/* fallbacks in the rendering description section */}
+              <p className="text-secondary mb-4">{description || 'No description available.'}</p>
 
-              <div className="mb-4">
-                <h5 className="fw-bold mb-3">
-                  <i className="bi bi-tools me-2 text-primary"></i>Specialties
-                </h5>
+              {/* For specialties */}
+              {specialties && specialties.length > 0 ? (
                 <div className="d-flex flex-wrap gap-2">
                   {specialties.map((spec, index) => (
                     <span key={index} className="badge bg-primary text-white px-3 py-2 rounded-pill">
@@ -147,7 +146,9 @@ const ShopDetail: React.FC = () => {
                     </span>
                   ))}
                 </div>
-              </div>
+              ) : (
+                <p className="text-muted small">No specialties listed</p>
+              )}
 
               {certifications && certifications.length > 0 && (
                 <div className="mb-4">
