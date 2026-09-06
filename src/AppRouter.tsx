@@ -1,13 +1,14 @@
 // src/AppRouter.tsx
 
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
-import { ROUTES } from './utils/constants';
-import Home from '@/pages/Home';
-import ShopDetail from '@/pages/ShopDetail';
-import About from '@/pages/About';
-import Contact from '@/pages/Contact';
-import AddShop from './pages/Addshop';
+import React from "react";
+import { Routes, Route } from "react-router-dom";
+import { ROUTES } from "./utils/constants";
+import Home from "@/pages/Home";
+import ShopDetail from "@/pages/ShopDetail";
+import About from "@/pages/About";
+import Contact from "@/pages/Contact";
+import AddShop from "./pages/AddShop";
+// import AddShop from "@/pages/Addshop";
 
 const AppRouter: React.FC = () => {
   return (

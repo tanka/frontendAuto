@@ -2,12 +2,7 @@
 
 import React from "react";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
-import {
-  setSpecialty,
-  setMinRating,
-  setCity,
-  clearFilters,
-} from "@/store/shopSlice";
+import { setSpecialty, setMinRating, clearFilters } from "@/store/shopSlice";
 import { shopsData } from "@/data/shops";
 
 const FilterSidebar: React.FC = () => {
@@ -20,17 +15,17 @@ const FilterSidebar: React.FC = () => {
   ).sort();
 
   // Get unique cities
-  const allCities = Array.from(
-    new Set(shopsData.map((shop) => shop.city)),
-  ).sort();
+  // const allCities = Array.from(
+  //   new Set(shopsData.map((shop) => shop.city)),
+  // ).sort();
 
   const handleSpecialtyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     dispatch(setSpecialty(e.target.value));
   };
 
-  const handleCityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    dispatch(setCity(e.target.value));
-  };
+  // const handleCityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  //   dispatch(setCity(e.target.value));
+  // };
 
   const handleRatingChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     dispatch(setMinRating(Number(e.target.value)));
