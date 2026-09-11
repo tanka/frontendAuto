@@ -42,8 +42,10 @@ const ShopDetail: React.FC = () => {
   }
 
   const {
+    id: shopId,
     name,
     imageUrl,
+    // address,
     city,
     state,
     zip,
@@ -102,30 +104,56 @@ const ShopDetail: React.FC = () => {
 
   return (
     <div className="container py-4">
-      <button
-        className="btn btn-outline-secondary btn-sm mb-4"
-        onClick={() => navigate(-1)}
-      >
-        <i className="bi bi-arrow-left me-2"></i> Back
-      </button>
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <button
+          className="btn btn-outline-secondary btn-sm"
+          onClick={() => navigate(-1)}
+        >
+          <i className="bi bi-arrow-left me-2"></i> Back
+        </button>
+        <div className="d-flex gap-2">
+          {/* 👇 NEW: Edit Shop Button */}
+          <button
+            className="btn btn-primary btn-sm rounded-pill px-4"
+            onClick={() => navigate(ROUTES.EDIT_SHOP.replace(":id", shopId))}
+          >
+            <i className="bi bi-pencil-square me-2"></i>
+            Edit Shop
+          </button>
+        </div>
+      </div>
 
       <div className="row g-4">
         <div className="col-lg-8">
           <div className="card border-0 shadow-sm rounded-4 overflow-hidden">
             <img
-              src={imageUrl}
+              src={
+                imageUrl ||
+                "https://via.placeholder.com/800x350/cccccc/666666?text=No+Image"
+              }
               alt={name}
               className="w-100"
               style={{ height: "350px", objectFit: "cover" }}
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.src =
+                  "https://via.placeholder.com/800x350/cccccc/666666?text=No+Image";
+              }}
             />
             <div className="card-body p-4">
               <div className="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
                 <h2 className="fw-bold mb-0">{name}</h2>
                 <div className="d-flex align-items-center bg-light px-3 py-2 rounded-3">
-                  <span className="fw-bold me-2 fs-5">{rating.toFixed(1)}</span>
-                  {renderStars(rating)}
+                  <span className="fw-bold me-2 fs-5">
+                    {rating?.toFixed(1) || "N/A"}
+                  </span>
+                  {rating > 0 ? (
+                    renderStars(rating)
+                  ) : (
+                    <span className="text-muted small">No ratings</span>
+                  )}
                   <span className="ms-2 text-secondary small">
-                    ({reviewCount} reviews)
+                    ({reviewCount || 0} reviews)
                   </span>
                 </div>
               </div>
@@ -146,26 +174,29 @@ const ShopDetail: React.FC = () => {
                 )}
               </div>
 
-              {/* fallbacks in the rendering description section */}
               <p className="text-secondary mb-4">
                 {description || "No description available."}
               </p>
 
-              {/* For specialties */}
-              {specialties && specialties.length > 0 ? (
-                <div className="d-flex flex-wrap gap-2">
-                  {specialties.map((spec, index) => (
-                    <span
-                      key={index}
-                      className="badge bg-primary text-white px-3 py-2 rounded-pill"
-                    >
-                      {spec}
-                    </span>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-muted small">No specialties listed</p>
-              )}
+              <div className="mb-4">
+                <h5 className="fw-bold mb-3">
+                  <i className="bi bi-tools me-2 text-primary"></i>Specialties
+                </h5>
+                {specialties && specialties.length > 0 ? (
+                  <div className="d-flex flex-wrap gap-2">
+                    {specialties.map((spec, index) => (
+                      <span
+                        key={index}
+                        className="badge bg-primary text-white px-3 py-2 rounded-pill"
+                      >
+                        {spec}
+                      </span>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-muted small">No specialties listed</p>
+                )}
+              </div>
 
               {certifications && certifications.length > 0 && (
                 <div className="mb-4">

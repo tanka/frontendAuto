@@ -11,7 +11,8 @@ export const ROUTES = {
   SHOP_MANAGEMENT: "/management",
   ABOUT_US: "/about",
   CONTACT_US: "/contact",
-  ADD_SHOP: '/addshop',  // Add new shop
+  ADD_SHOP: "/addshop", // Add new shop
+  EDIT_SHOP: "/editshop/:id", // Edit existing shop
 };
 
 export const ROLES = {
