@@ -232,7 +232,7 @@ const EditShop: React.FC = () => {
         specialties: formData.specialties,
         certifications: formData.certifications,
       };
-
+      console.log("Request Body:", requestBody);
       const response = await fetch(
         `${BASE_URL}${API_ENDPOINTS.SHOPS}/${formData.id}`,
         {
@@ -246,6 +246,7 @@ const EditShop: React.FC = () => {
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
+        console.error("Failed to update shop:", response.statusText);
       }
 
       const data = await response.json();
@@ -264,6 +265,8 @@ const EditShop: React.FC = () => {
         toast.error(errorMsg);
       }
     } catch (error) {
+      console.error("Error updating shop:", error);
+      console.log(`${BASE_URL}${API_ENDPOINTS.SHOPS}/${formData.id}`);
       if (error instanceof Error) {
         toast.error(error.message);
       } else {
